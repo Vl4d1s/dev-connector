@@ -9,11 +9,10 @@ const User = require('../../models/User');
 
 // @route   GET api/auth
 // @desc    Test route
-// @access  Public
+// @access  Privat
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    console.log('user:', user);
     res.json(user);
   } catch (err) {
     console.error(err.message);
