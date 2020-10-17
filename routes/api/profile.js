@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
-
 const auth = require('../../middleware/auth');
 const { check, validationResult, body } = require('express-validator');
+const { json } = require('express');
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -66,6 +66,7 @@ router.post(
     if (status) profileFields.status = status;
     if (githubusername) profileFields.githubusername = githubusername;
     if (skills) {
+      // Split by comma & remove spaces
       profileFields.skills = skills.split(',').map((skill) => skill.trim());
     }
 
@@ -204,5 +205,28 @@ router.put(
     }
   },
 );
+
+// @route   DELETE api/profile/experience/:exp_id
+// @desc    Delete experience from profile
+// @access  Private
+
+router.delete('/experience/:exp_id', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    console.log(profile);
+    // Get the remove index
+    const removeIndex = profile.experience.map((item) => item.id).indexOf(req.params.exp_id);
+    console.log(removeIndex);
+
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

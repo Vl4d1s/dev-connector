@@ -8,7 +8,7 @@ const auth = require('../../middleware/auth');
 const User = require('../../models/User');
 
 // @route   GET api/auth
-// @desc    Test route
+// @desc    Authnticate user & get user
 // @access  Privat
 router.get('/', auth, async (req, res) => {
   try {
@@ -49,7 +49,7 @@ router.post(
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
-
+      // See if the password maches
       if (!isMatch) {
         return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
