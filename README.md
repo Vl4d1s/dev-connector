@@ -1,2 +1,3 @@
-# DevConnector
- Full Stack React, Redux & Node.js website
+#
+ DevConnector
+ Backend server for Social Network Web Application using Node.js
